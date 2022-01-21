@@ -27,10 +27,6 @@ namespace BulkyBookWeb.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult CreateCategory(Category obj)
         {
-            if(obj.Name == obj.DisplayOrder.ToString())
-            {
-                ModelState.AddModelError("CustomError", "DisplayOrder and Name cannot be same");
-            }
             if(ModelState.IsValid)
             {
                 _db.Categories.Add(obj);
