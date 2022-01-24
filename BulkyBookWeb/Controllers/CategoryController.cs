@@ -27,17 +27,22 @@ namespace BulkyBookWeb.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult CreateCategory(Category obj)
         {
+            if(obj.Name == obj.DisplayOrder.ToString())
+            {
+                ModelState.AddModelError("name", "DisplayOrder and Name cannot be same");
+            }
             if(ModelState.IsValid)
             {
                 _db.Categories.Add(obj);
                 _db.SaveChanges();
+                TempData["Success"] = "Category Created Successfully";
                 return RedirectToAction("Index");
             }
             return View(obj);
         }
         public IActionResult Edit(int? id)
         {
-            if(id == null)
+            if(id == null || id == 0)
             {
                 return NotFound();
             }
@@ -54,10 +59,15 @@ namespace BulkyBookWeb.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Category obj)
         {
+            if (obj.Name == obj.DisplayOrder.ToString())
+            {
+                ModelState.AddModelError("CustomError", "DisplayOrder and Name cannot be same");
+            }
             if (ModelState.IsValid)
             {
                 _db.Categories.Update(obj);
                 _db.SaveChanges();
+                TempData["Success"] = "Category Edited Successfully";
                 return RedirectToAction("Index");
             }
             return View(obj);
@@ -89,6 +99,7 @@ namespace BulkyBookWeb.Controllers
             }
             _db.Categories.Remove(obj);
             _db.SaveChanges();
+            TempData["Success"] = "Category Deleted Successfully";
             return RedirectToAction("Index");
           
         }
